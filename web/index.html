@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vaca Muerta 2025 – explorador (borrador)</title>
+</head>
+<body>
+<div id="app">
+  <header id="top">
+    <div class="titulo">
+      <h1>Vaca Muerta 2025</h1>
+      <span class="sub">Producción, propiedad, insumos y destino · borrador sin diseño final</span>
+    </div>
+    <div class="controles">
+      <div class="seg" data-ctl="unit"><button data-v="fis">Unidades físicas</button><button data-v="usd">USD</button></div>
+      <div class="seg" data-ctl="view"><button data-v="operador">Operador</button><button data-v="dueno">Dueños</button></div>
+      <div class="seg" data-ctl="color"><button data-v="cat">Origen del capital</button><button data-v="grupo">Empresa</button></div>
+      <label class="foto">Dueños a <select id="foto">
+        <option value="2020-12">dic-2020</option><option value="2023-12">dic-2023</option>
+        <option value="2025-12">dic-2025</option><option value="2026-10">oct-2026</option></select></label>
+      <label class="foto">Empresa <select id="fEmp"><option value="">Todas</option></select></label>
+      <label class="foto">País <select id="fPais"><option value="">Todos</option></select></label>
+    </div>
+  </header>
+  <main>
+    <section id="mapwrap">
+      <div id="map"></div>
+      <div id="legend"></div>
+      <details id="capas" open><summary>Capas</summary>
+        <label><input type="checkbox" data-capa="areas" checked> Áreas</label>
+        <label><input type="checkbox" data-capa="ductos"> Ductos</label>
+        <label><input type="checkbox" data-capa="quema"> Quema (satélite)</label>
+        <label><input type="checkbox" data-capa="flujos"> Flujos nacionales</label>
+        <label>Tamaño <select id="tam"><option value="pet">Petróleo 2025</option><option value="gas">Gas 2025</option><option value="usd">Valor 2025 (USD)</option><option value="arena">Arena de fractura</option></select></label>
+      </details>
+      <div id="tip" hidden></div>
+    </section>
+    <aside id="panel">
+      <nav id="pasos"></nav>
+      <div id="contenido"></div>
+      <div id="navbtns"><button id="prev">Anterior</button><span id="pasoN"></span><button id="next">Siguiente</button></div>
+    </aside>
+  </main>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

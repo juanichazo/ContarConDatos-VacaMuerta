@@ -1,0 +1,26 @@
+{
+  "name": "vaca-muerta-explorador",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@deck.gl/core": "9.0.38",
+    "@deck.gl/extensions": "9.0.38",
+    "@deck.gl/layers": "9.0.38",
+    "@deck.gl/mapbox": "9.0.38",
+    "d3": "7.9.0",
+    "d3-sankey": "0.12.3",
+    "maplibre-gl": "4.7.1",
+    "topojson-client": "3.1.0",
+    "world-atlas": "2.0.2"
+  },
+  "devDependencies": {
+    "vite": "5.4.11",
+    "vite-plugin-singlefile": "2.0.3"
+  }
+}

@@ -1,0 +1,67 @@
+area_key,grupo,participacion,desde,hasta,confianza,fuente
+LOMA CAMPANA,YPF,50,2013-01-01,,alta,GeoServer Neuquén; GEM wiki
+LOMA CAMPANA,Chevron,50,2013-01-01,,alta,GeoServer Neuquén; GEM wiki
+NARAMBUENA,YPF,50,2019-01-01,,alta,GeoServer Neuquén
+NARAMBUENA,Chevron,50,2019-01-01,,media,GeoServer (Compañía de Desarrollo No Convencional = Chevron)
+LA AMARGA CHICA,YPF,50,2014-01-01,,alta,GeoServer Neuquén
+LA AMARGA CHICA,Petronas,50,2014-01-01,2025-04-01,alta,Cronista/FT; iProfesional
+LA AMARGA CHICA,Vista,50,2025-04-01,,alta,GeoServer (Vista Energy LACH); iProfesional
+BANDURRIA SUR,YPF,40,2020-01-01,,alta,GeoServer Neuquén
+BANDURRIA SUR,Shell,30,2020-01-01,,media,GeoServer (Bandurria Sur Investments 60% = Shell 30 + Equinor 30)
+BANDURRIA SUR,Equinor,30,2020-01-01,2026-05-07,media,iProfesional (cierre Equinor→Vista 7/5/2026)
+BANDURRIA SUR,Vista,30,2026-05-07,,media,iProfesional
+BAJO DEL TORO NORTE,YPF,50,2020-01-01,,alta,GeoServer Neuquén
+BAJO DEL TORO NORTE,Equinor,50,2020-01-01,2026-05-07,alta,GeoServer Neuquén
+BAJO DEL TORO NORTE,Vista,50,2026-05-07,,media,iProfesional (cierre Equinor→Vista 7/5/2026)
+SIERRA CHATA,Pampa Energía,45.55,2010-01-01,,alta,GeoServer Neuquén
+SIERRA CHATA,ExxonMobil,38.115,2010-01-01,2025-01-15,baja,"Exxon+Qatar 54,45% repartido 70/30 (aproximación propia)"
+SIERRA CHATA,QatarEnergy,16.335,2010-01-01,2025-01-15,baja,"Exxon+Qatar 54,45% repartido 70/30 (aproximación propia)"
+SIERRA CHATA,YPF,54.45,2025-01-15,,alta,Bloomberg Línea; GeoServer (SC Gas)
+BAJO DEL CHOIQUE - LA INVERNADA,GyP (Neuquén),10,2010-01-01,,alta,GeoServer Neuquén
+BAJO DEL CHOIQUE - LA INVERNADA,ExxonMobil,90,2010-01-01,2024-12-01,media,"Antes de dic-2024: Exxon (parte de QatarEnergy no verificada)"
+BAJO DEL CHOIQUE - LA INVERNADA,Pluspetrol,90,2024-12-01,,alta,GeoServer (Pluspetrol Cuenca Neuquina); El Economista
+LOS TOLDOS I SUR,GyP (Neuquén),10,2010-01-01,,alta,GeoServer Neuquén
+LOS TOLDOS I SUR,Tecpetrol,10,2010-01-01,,alta,GeoServer Neuquén
+LOS TOLDOS I SUR,ExxonMobil,80,2010-01-01,2024-12-01,media,GeoServer + venta Exxon→Pluspetrol
+LOS TOLDOS I SUR,Pluspetrol,80,2024-12-01,,alta,GeoServer Neuquén
+LOS TOLDOS II OESTE,GyP (Neuquén),10,2010-01-01,,alta,GeoServer Neuquén
+LOS TOLDOS II OESTE,ExxonMobil,90,2010-01-01,2024-12-01,media,venta Exxon→Pluspetrol
+LOS TOLDOS II OESTE,Pluspetrol,90,2024-12-01,2025-11-17,media,GeoServer (todavía lista a Pluspetrol)
+LOS TOLDOS II OESTE,Continental Resources,90,2025-11-17,,media,NoticiasNQN 17/11/2025; GeoServer ya lista a Continental como operador
+PAMPA DE LAS YEGUAS I,YPF,50,2010-01-01,,alta,GeoServer Neuquén
+PAMPA DE LAS YEGUAS I,ExxonMobil,50,2010-01-01,2024-12-01,media,venta Exxon→Pluspetrol
+PAMPA DE LAS YEGUAS I,Pluspetrol,50,2024-12-01,,alta,GeoServer Neuquén
+LOMA DEL MOLLE,YPF,50,2010-01-01,,alta,GeoServer Neuquén
+LOMA DEL MOLLE,ExxonMobil,50,2010-01-01,2024-12-01,media,venta Exxon→Pluspetrol
+LOMA DEL MOLLE,Pluspetrol,50,2024-12-01,,alta,GeoServer Neuquén
+LA ESCALONADA,GyP (Neuquén),10,2010-01-01,,alta,GeoServer Neuquén
+LA ESCALONADA,Shell,45,2010-01-01,,alta,GeoServer Neuquén
+LA ESCALONADA,TotalEnergies,45,2010-01-01,2025-08-06,alta,LexLatin; Buenos Aires Herald
+LA ESCALONADA,YPF,45,2025-08-06,,media,"GeoServer (Vaca Muerta Inversiones, vendida entera a YPF)"
+RINCON LA CENIZA,GyP (Neuquén),10,2010-01-01,,alta,GeoServer Neuquén
+RINCON LA CENIZA,Shell,45,2010-01-01,,alta,GeoServer Neuquén
+RINCON LA CENIZA,TotalEnergies,45,2010-01-01,2025-08-06,alta,LexLatin; Buenos Aires Herald
+RINCON LA CENIZA,YPF,45,2025-08-06,,media,"GeoServer (Vaca Muerta Inversiones, vendida entera a YPF)"
+LOMA JARILLOSA ESTE,Pluspetrol,100,2010-01-01,2025-09-01,media,La República (fecha de cierre a verificar)
+LOMA JARILLOSA ESTE,GeoPark,100,2025-09-01,,alta,GeoServer Neuquén
+PUESTO SILVA OESTE,Pluspetrol,100,2010-01-01,2025-09-01,media,La República (fecha de cierre a verificar)
+PUESTO SILVA OESTE,GeoPark,100,2025-09-01,,alta,GeoServer Neuquén
+AGUADA CANEPA,GyP (Neuquén),10,2010-01-01,,alta,GeoServer Neuquén
+AGUADA CANEPA,PAE,90,2010-01-01,2026-05-01,media,GeoServer + venta PAE→Continental
+AGUADA CANEPA,PAE,72,2026-05-01,,alta,GeoServer Neuquén
+AGUADA CANEPA,Continental Resources,18,2026-05-01,,alta,GeoServer Neuquén
+COIRON AMARGO SUR ESTE,GyP (Neuquén),10,2010-01-01,,alta,GeoServer Neuquén
+COIRON AMARGO SUR ESTE,PAE,90,2010-01-01,2026-05-01,media,GeoServer + venta PAE→Continental
+COIRON AMARGO SUR ESTE,PAE,72,2026-05-01,,alta,GeoServer Neuquén
+COIRON AMARGO SUR ESTE,Continental Resources,18,2026-05-01,,alta,GeoServer Neuquén
+BANDURRIA CENTRO,PAE,100,2010-01-01,2026-05-01,media,GeoServer + venta PAE→Continental
+BANDURRIA CENTRO,PAE,80,2026-05-01,,alta,GeoServer Neuquén
+BANDURRIA CENTRO,Continental Resources,20,2026-05-01,,alta,GeoServer Neuquén
+AGUADA FEDERAL,ConocoPhillips,50,2010-01-01,2021-09-01,baja,Wintershall Dea (fecha aproximada de la compra de Vista)
+AGUADA FEDERAL,Harbour Energy,50,2010-01-01,2022-01-01,media,Wintershall Dea ene-2022 (entonces Wintershall Dea)
+AGUADA FEDERAL,Vista,50,2021-09-01,,media,Wintershall Dea ene-2022
+AGUADA FEDERAL,Vista,50,2022-01-01,,alta,Wintershall Dea ene-2022; GeoServer (AFBN)
+BANDURRIA NORTE,ConocoPhillips,50,2010-01-01,2021-09-01,baja,Wintershall Dea (fecha aproximada de la compra de Vista)
+BANDURRIA NORTE,Harbour Energy,50,2010-01-01,2022-01-01,media,Wintershall Dea ene-2022 (entonces Wintershall Dea)
+BANDURRIA NORTE,Vista,50,2021-09-01,,media,Wintershall Dea ene-2022
+BANDURRIA NORTE,Vista,50,2022-01-01,,alta,Wintershall Dea ene-2022; GeoServer (AFBN)

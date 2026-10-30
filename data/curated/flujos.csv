@@ -1,0 +1,7 @@
+id,desde,hasta,producto,etiqueta,estado,clave_libro,fuente,capacidad,fuente_capacidad
+arena,ibicuy,anelo,arena,Arena: Ibicuy → Añelo (1.474 km),operativo,arena,+E Radiografía de la arena (70–80% desde Entre Ríos),70–80% de la arena de fractura,
+oldelval,anelo,allen,petroleo,Oldelval: Añelo → Allen,operativo,petroleo,+E (Duplicar Plus); trazado esquemático,530.000 bbl/día (todo el sistema),"NoticiasNQN, 24/7/2026"
+rosales,allen,puerto_rosales,petroleo,Oldelval: Allen → Puerto Rosales (puerto de exportación y cabotaje),operativo,pet_export,+E Puerto Rosales; incluye también cabotaje a refinerías,,
+otasa,puesto_hernandez,chile_biobio,petroleo,Otasa: Puesto Hernández → Chile,operativo,,DEF; sin volumen propio en el libro,110.000 bbl/día,DEF
+vmos,anelo,punta_colorada,petroleo,VMOS: Añelo → Punta Colorada (en construcción),futuro,,iProfesional; +E,En construcción · 180.000 bbl/día (1.ª etapa),"iProfesional, 16/7/2026: 1.ª etapa a fin de 2026; 550.000 bbl/día al final"
+perito_moreno,tratayen,salliquelo,gas,Gasoducto Perito Moreno: Tratayén → Salliqueló,operativo,gas_interno,+E,21 millones de m³/día,"Río Negro, 10/2/2026"

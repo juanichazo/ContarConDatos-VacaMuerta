@@ -1,0 +1,28 @@
+patron,grupo,pais_sede,categoria,nota,fuente
+^YPF|SC GAS|VACA MUERTA INVERSIONES|YSUR|APACHE,YPF,Argentina,Argentina,"Estado nacional 51%. SC Gas (Sierra Chata) y Vaca Muerta Inversiones son vehículos comprados por YPF en 2025",Bloomberg Línea ene-2025; LexLatin ago-2025
+GAS Y PETROLEO DEL NEUQU|GAS Y PETRÓLEO DEL NEUQU|UTE G ?& ?P|^G ?& ?P,GyP (Neuquén),Argentina,Argentina,Empresa del Estado provincial de Neuquén,GeoServer Neuquén
+PLUSPETROL|APCO OIL,Pluspetrol,Argentina,Argentina,Familia Rodríguez Rey; Pluspetrol Cuenca Neuquina = ex ExxonMobil Exploration Argentina (comprada dic-2024),El Economista; iProfesional
+TECPETROL,Tecpetrol,Argentina,Argentina,"Grupo Techint (holding San Faustin, Luxemburgo; familia Rocca). Se cuenta como argentina, igual que E&E",empresas_y_propiedad.md
+PAMPA,Pampa Energía,Argentina,Argentina,,
+CAPEX,Capex,Argentina,Argentina,,
+BENTIA|OILSTONE|PATAGONIA ENERGY|FLXS|PETROLSUR|INGENIERIA SIMA|INGENIERÍA SIMA|PETROLEOS SUDAMERICANOS|MEDANITO|ARGENTA|QUINTANA|SAN JORGE|HOMAQ|JCR|ROVELLA|PETROQUIMICA COMODORO|ACONCAGUA|G Y G OIL|PETROLERA PIEDRA|TANGO ENERGY|GENERAL DE COMBUSTIBLE|ENERGICON|GRECOIL|VENOIL,Otras argentinas,Argentina,Argentina,Operadoras chicas de capital argentino,
+VISTA|AFBN,Vista,México (sede legal),Mixto,"Gestión argentina, sede legal en México, cotiza en NYSE. AFBN = vehículo de Aguada Federal y Bandurria Norte (Vista 100% desde 2022)",Wintershall Dea ene-2022; Vista 20-F
+PAN AMERICAN|^PAE,PAE,Argentina/Reino Unido,Mixto,"BP 50% + Bridas 50% (Bulgheroni 50 / CNOOC 50): ~75% capital extranjero, gestión argentina",EconoJournal 2017
+SHELL|BANDURRIA SUR INVESTMENTS|O&G DEVELOPMENTS,Shell,Reino Unido,Europa,Bandurria Sur Investments = Shell 50% + Equinor 50% (se separa en historia_propiedad.csv),
+CHEVRON|HIDROCARBUROS NO CONVENCIONAL|DESARROLLO NO CONVENCIONAL,Chevron,EE.UU.,EE.UU.,Compañía de Hidrocarburos No Convencional (Loma Campana) y Compañía de Desarrollo No Convencional (Narambuena) son vehículos de Chevron,GEM wiki; NoticiasNQN
+CONTINENTAL,Continental Resources,EE.UU.,EE.UU.,Shale independiente de EE.UU.,NoticiasNQN nov-2025; Cronista ago-2026
+POLISUR|DOW,Dow,EE.UU.,EE.UU.,PBB Polisur (Dow),
+EXXON,ExxonMobil,EE.UU.,EE.UU.,Salió en dic-2024,
+TOTAL,TotalEnergies,Francia,Europa,,
+WINTERSHALL|HARBOUR,Harbour Energy,Reino Unido,Europa,Wintershall Dea Argentina pasó a Harbour (2024),
+EQUINOR,Equinor,Noruega,Europa,Salió en may-2026,
+PHOENIX|EL TREBOL|EL TRÉBOL|KILWER,Phoenix (Mercuria),Suiza,Europa,"Kilwer y Petrolera El Trébol son subsidiarias de Phoenix Global Resources; Mercuria es el accionista mayoritario",Río Negro (Mata Mora)
+INTEROIL|SELVA MARIA,Interoil,Noruega,Europa,,
+PETRONAS,Petronas,Malasia,Asia y Medio Oriente,Salió en 2025,
+QATAR,QatarEnergy,Qatar,Asia y Medio Oriente,,
+GEOPARK,GeoPark,Colombia,Latinoamérica,,
+PETROBRAS,Petrobras,Brasil,Latinoamérica,,
+CONOCO,ConocoPhillips,EE.UU.,EE.UU.,Vendió a Vista en 2021,Wintershall Dea ene-2022
+MADALENA,Madalena,Canadá,Otros,,
+CENTRAL ARGENTINA INTERNATIONAL,Otros extranjeros,EE.UU.,Otros,Socio de CGC en El Sauce (área convencional),
+AMERICAS PETROGAS,Otros extranjeros,Canadá,Otros,Operó pozos de prueba antes de 2016,

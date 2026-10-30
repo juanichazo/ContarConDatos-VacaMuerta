@@ -1,0 +1,59 @@
+/* Estilo provisorio, neutro. Colores de datos en theme.js */
+:root { --bg: #F4F5F2; --panel: #fff; --ink: #1B1E22; --muted: #5B636B; --line: #D5D9DC; --acc: #1B1E22; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+#app { display: flex; flex-direction: column; height: 100vh; }
+#top { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+h1 { font-size: 20px; margin: 0; }
+.sub { color: var(--muted); font-size: 12px; }
+.controles { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 6px 10px; font: inherit; font-size: 13px; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--acc); color: #fff; }
+.foto, #capas label { font-size: 13px; color: var(--muted); }
+select { font: inherit; font-size: 13px; padding: 3px 4px; }
+main { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 440px; min-height: 0; }
+#mapwrap { position: relative; min-height: 0; }
+#map { position: absolute; inset: 0; }
+#legend { position: absolute; z-index: 3; left: 10px; bottom: 26px; max-width: min(420px, calc(100% - 20px)); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; font-size: 12px; }
+#capas summary { cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); }
+#capas { position: absolute; z-index: 4; right: 10px; top: 10px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.12); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; gap: 2px; }
+#tip { position: absolute; z-index: 5; pointer-events: none; max-width: 260px; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; font-size: 12px; box-shadow: 0 3px 12px rgba(0,0,0,.12); }
+#tip .m, .lt.m { color: var(--muted); }
+.lt { margin-bottom: 4px; }
+.lt.filtro { font-weight: 600; color: var(--ink); }
+.leyenda { display: flex; flex-wrap: wrap; gap: 3px 12px; margin: 4px 0; font-size: 12px; }
+.leyenda i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+#panel { display: flex; flex-direction: column; background: var(--panel); border-left: 1px solid var(--line); min-height: 0; }
+#pasos { display: flex; gap: 4px; padding: 10px 16px 0; flex-wrap: wrap; }
+#pasos button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; font: inherit; font-size: 13px; }
+#pasos button[aria-current="true"] { background: var(--acc); color: #fff; border-color: var(--acc); }
+#contenido { flex: 1; overflow-y: auto; padding: 6px 16px 12px; }
+#contenido h2 { font-size: 17px; margin: 10px 0 8px; }
+#contenido h3 { font-size: 12.5px; font-weight: 600; color: var(--muted); margin: 14px 0 4px; }
+.dato { font-size: 15px; margin: 6px 0; }
+.nota { font-size: 11.5px; color: var(--muted); margin-top: 12px; }
+.ch svg text.lbl { font-size: 11px; fill: var(--ink); }
+.ch svg text.lbl.sel { font-weight: 700; }
+.ch svg text.val { font-size: 11px; fill: var(--muted); }
+.ch svg text.in { font-size: 10.5px; fill: #fff; font-weight: 600; }
+.lado { font-weight: 700; margin: 10px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+table.libro { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.libro td, table.libro th { padding: 3px 4px; border-bottom: 1px solid #EEF0F1; vertical-align: top; text-align: left; }
+table.libro td.r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+ul.tx { padding-left: 18px; margin: 6px 0; font-size: 12.5px; }
+ul.tx li { margin: 3px 0; }
+#navbtns { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; border-top: 1px solid var(--line); }
+#navbtns button { font: inherit; padding: 6px 14px; border: 1px solid var(--acc); background: var(--acc); color: #fff; border-radius: 6px; cursor: pointer; }
+#navbtns button:disabled { opacity: .3; cursor: default; }
+#pasoN { color: var(--muted); font-size: 12px; }
+@media (max-width: 860px) {
+  #app { height: auto; }
+  main { grid-template-columns: 1fr; }
+  #mapwrap { height: 58vh; }
+  #panel { border-left: 0; border-top: 1px solid var(--line); }
+  #capas { font-size: 12px; padding: 4px 8px; }
+  #legend { bottom: 22px; left: 4px; font-size: 10.5px; padding: 5px 7px; max-width: calc(100% - 60px); }
+  #legend .lt.m { display: none; }
+  .maplibregl-ctrl-attrib { font-size: 9px; }
+}

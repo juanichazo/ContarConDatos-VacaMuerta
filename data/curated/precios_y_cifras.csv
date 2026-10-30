@@ -1,0 +1,23 @@
+clave,valor,unidad,periodo,fuente,nota
+iae_export_pet_mmbbl,63.1,MMbbl,2025,IAE Mosconi p.25,Cuenca Neuquina (no solo Vaca Muerta)
+iae_export_pet_musd,4111,MUSD,2025,IAE Mosconi p.25,Cuenca Neuquina
+iae_export_pet_pct,29.4,% de la producción de la cuenca,2025,IAE Mosconi p.25,
+iae_export_gas_mmm3,2479,MMm3,2025,IAE Mosconi p.25,Cuenca Neuquina
+iae_export_gas_musd,577,MUSD,2025,IAE Mosconi p.25,Cuenca Neuquina
+iae_export_gas_pct,5.5,% de la producción de la cuenca,2025,IAE Mosconi p.25,
+iae_regalias_vm_musd,1450,MUSD,2025,IAE Mosconi p.24,Estimación del IAE; 81% petróleo / 19% gas
+iae_inversion_vm_musd,8392,MUSD,2025,IAE Mosconi p.26,Inversión prevista (la ejecutada 2025 no estaba informada)
+iae_inversion_vm_acum_musd,51355,MUSD,2012-2025,IAE Mosconi p.26,
+precio_pet_usd_bbl,65.15,USD/bbl,2025,"Cálculo propio: 4.111 MUSD / 63,1 MMbbl (IAE)","Precio implícito de exportación; rango 63–67 en otras fuentes (Vista 62,9; Neuquén ~67)"
+precio_gas_usd_mmbtu,3.6,USD/MMBTU,2025,"Pampa 6-K (3,7) y Plan Gas (~3,5)",Precio de mercado interno
+gas_mmbtu_por_m3,0.0369,MMBTU/m3,,"Poder calorífico 9.300 kcal/m3 (convención argentina)",A verificar contra ENARGAS
+precio_arena_pozo_usd_t,145,USD/t,oct-2026,"+E LMNeuquén 8/10/2026",Costo puesto en pozo; en cantera 22 USD/t
+precio_arena_cantera_usd_t,22,USD/t,oct-2026,"+E LMNeuquén 8/10/2026",
+t_por_viaje_camion,38,t/viaje,2026,"Cálculo propio: 6,5 Mt / 170.000 viajes (+E Radiografía, CATAC)",Estimación
+barril_int_neuquen,13723,USD por 1.000 bbl,ago-2026,Ministerio de Economía de Neuquén vía El Economista,"Brent 85, FOB 80,5"
+barril_int_nacion,7878,USD por 1.000 bbl,ago-2026,Ministerio de Economía de Neuquén vía El Economista,
+barril_exp_neuquen,10447,USD por 1.000 bbl,ago-2026,Ministerio de Economía de Neuquén vía El Economista,
+barril_exp_nacion,13793,USD por 1.000 bbl,ago-2026,Ministerio de Economía de Neuquén vía El Economista,
+barril_rigi_neuquen,11276,USD por 1.000 bbl,ago-2026,Ministerio de Economía de Neuquén vía El Economista,
+barril_rigi_nacion,5909,USD por 1.000 bbl,ago-2026,Ministerio de Economía de Neuquén vía El Economista,
+barril_fob,80500,USD por 1.000 bbl,ago-2026,Ministerio de Economía de Neuquén vía El Economista,

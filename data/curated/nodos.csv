@@ -1,0 +1,10 @@
+id,nombre,lat,lon,tipo,fuente,precision
+anelo,Añelo,-38.354,-68.788,origen,OSM,ciudad
+ibicuy,Ibicuy (Entre Ríos),-33.744,-59.170,arena,OSM,localidad (canteras aprox.)
+allen,Allen (cabecera Oldelval),-38.977,-67.827,ducto,OSM,localidad (estación aprox.)
+puerto_rosales,Puerto Rosales (Punta Alta),-38.906,-62.064,puerto,OSM,aprox.
+punta_colorada,Punta Colorada (VMOS),-41.693,-65.027,puerto_futuro,OSM,aprox.
+puesto_hernandez,Puesto Hernández (cabecera Otasa),-37.412,-69.137,ducto,OSM,aprox.
+chile_biobio,Biobío (Chile),-36.776,-73.118,destino,OSM,aprox. (refinería de Hualpén)
+tratayen,Tratayén (cabecera gasoducto Perito Moreno),-38.405,-68.613,ducto,OSM,aprox.
+salliquelo,Salliqueló (Buenos Aires),-36.752,-62.958,ducto,OSM,localidad

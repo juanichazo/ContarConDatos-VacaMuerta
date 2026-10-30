@@ -1,0 +1,18 @@
+# dependencias y builds
+node_modules/
+web/dist/
+web/dist-poster/
+__pycache__/
+*.pyc
+
+# datos originales (pesados) y procesados (se regeneran con scripts/run_all.py)
+data/raw/*
+!data/raw/MANIFEST.sha256
+data/processed/
+
+# sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
