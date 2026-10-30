@@ -120,3 +120,111 @@ ul.tx li { margin: 4px 0; }
 #capas { display: block; width: 240px; }
 #capas .col { display: flex !important; flex-direction: column !important; }
 #capas .col label { width: 100%; }
+
+
+/* ===================== temática: atardecer en el yacimiento ===================== */
+:root {
+  --bg: #E9D9C2;          /* polvo */
+  --ink: #2A2020;
+  --muted: #6E5A4C;
+  --line: #C9B79D;
+  --noche: #1A1416;
+  --noche-caja: #221A1B;
+  --noche-linea: #4A3530;
+  --noche-ink: #EDE4D6;
+  --noche-muted: #B9A893;
+  --tierra: #2A2020;
+  --naranja: #D9572B;
+  --titulo: 'Oswald', 'Arial Narrow', sans-serif;
+}
+html, body { background: var(--noche); }
+
+/* encabezado: cielo de atardecer quemado */
+#top { position: relative; overflow: hidden; border-bottom: 0; padding: 18px 22px;
+  background: linear-gradient(180deg, #7A2E2A 0%, #D9572B 55%, #F2A65A 100%);
+  filter: saturate(1.2) contrast(1.1) sepia(.15); }
+#top::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,210,120,.5), transparent 35%),
+    radial-gradient(circle at 100% 10%, rgba(255,90,40,.4), transparent 30%);
+  mix-blend-mode: screen; }
+#top::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px); }
+#top > * { position: relative; z-index: 1; }
+h1 { font: 600 32px/1 var(--titulo); text-transform: uppercase; letter-spacing: .02em; color: #fff;
+  text-shadow: -2px 0 rgba(255,40,40,.6), 2px 0 rgba(40,200,255,.4), 0 2px 12px rgba(60,10,0,.4); }
+.sub { color: #FFE9D2; }
+.foto { color: #FFE9D2; }
+
+/* controles como chapa de yacimiento */
+.seg { background: rgba(42,32,32,.55); border: 1px solid rgba(255,230,200,.35); border-radius: 0; }
+.seg button { color: #F3E3CF; font: 500 12px var(--titulo); letter-spacing: .08em; text-transform: uppercase; }
+.seg button[aria-pressed="true"] { background: var(--tierra); color: #fff; }
+#top select { background: rgba(42,32,32,.55); color: #F3E3CF; border-color: rgba(255,230,200,.35); border-radius: 0; }
+
+/* mapa: noche cálida con viñeta */
+#mapwrap { background: var(--noche); }
+#map .maplibregl-canvas { filter: invert(1) hue-rotate(180deg) saturate(.4) sepia(.35) brightness(.72) contrast(1.05); }
+#mapwrap::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(10,2,0,.55) 100%), rgba(255,120,60,.04); }
+#legend, #capas, #tip { border-radius: 0; }
+#capas summary, #legend .lt:first-child { font-family: var(--titulo); letter-spacing: .08em; text-transform: uppercase; }
+
+/* panel: papel polvoriento con borde naranja */
+#panel { border-left: 4px solid var(--naranja);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(160,90,40,.16), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(120,60,30,.14), transparent 45%),
+    var(--bg); }
+#contenido h2 { font: 600 28px/1.05 var(--titulo); text-transform: uppercase; letter-spacing: .01em; }
+#pasos button { border-radius: 0; background: transparent; border-color: #B9A893; font-family: var(--titulo); color: var(--ink); }
+#pasos button[aria-current="true"] { background: var(--tierra); color: var(--bg); border-color: var(--tierra); }
+#navbtns button { border-radius: 0; background: var(--tierra); border-color: var(--tierra); font: 500 13px var(--titulo); letter-spacing: .08em; text-transform: uppercase; }
+table.libro td, table.libro th { border-bottom-color: #D6C6AE; }
+
+/* película: grano fijo y viñeta sobre toda la pantalla (sin animación, para no cargar el mapa) */
+.pelicula { position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: .13; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 .9  0 0 0 0 .8  0 0 0 1.6 -.3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.vineta { position: fixed; inset: 0; z-index: 49; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 45%, transparent 60%, rgba(20,6,4,.4) 100%); }
+
+
+/* ---------- paleta azul / ámbar (la quema sigue naranja) ---------- */
+:root { --violeta: #F0A53A; --rojo: #FF5638; }
+.m-vi { background: rgba(240,165,58,.30); }
+.m-ro { background: rgba(255,86,56,.20); }
+
+/* ---------- más distorsión en todas las pantallas ---------- */
+.pelicula { opacity: .2; }
+/* líneas de escaneo muy suaves sobre todo */
+.vineta::after { content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 1px, transparent 1px 3px); }
+/* fuga de luz cálida en el borde izquierdo y arriba del panel */
+#panel { position: relative; }
+#panel::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(255,120,40,.12), transparent 18%),
+    radial-gradient(ellipse at 70% -10%, rgba(255,170,80,.25), transparent 45%);
+  mix-blend-mode: multiply; }
+#panel > * { position: relative; z-index: 1; }
+/* títulos del panel con aberración cromática leve */
+#contenido h2 { text-shadow: -1.5px 0 rgba(220,30,30,.35), 1.5px 0 rgba(30,150,220,.3); }
+/* el mapa con un leve corrimiento de color en los bordes */
+#mapwrap::before { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  box-shadow: inset 6px 0 18px -10px rgba(255,40,40,.35), inset -6px 0 18px -10px rgba(40,180,255,.3); }
+
+/* leyenda más angosta y título en minúscula para que no ocupe tantas líneas */
+#legend { max-width: 210px; }
+#legend .lt:first-child { text-transform: none; letter-spacing: .02em; font-size: 12px; }
+
+/* capas y filtros: selects alineados en una grilla de dos columnas */
+#capas .col label:not(:has(input)) { display: grid; grid-template-columns: 70px 140px; align-items: center; gap: 8px; }
+#capas .col select { width: 140px; max-width: 140px; }
+
+/* casillas con la temática: cuadradas, color tierra, tilde naranja */
+#capas input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 15px; height: 15px; margin: 0 8px 0 0;
+  border: 1.5px solid #B9A893; background: #2A2020; display: inline-grid; place-content: center; cursor: pointer; }
+#capas input[type="checkbox"]::before { content: ''; width: 8px; height: 8px; background: #D9572B;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); transform: scale(0); transition: transform .12s; }
+#capas input[type="checkbox"]:checked { border-color: #D9572B; }
+#capas input[type="checkbox"]:checked::before { transform: scale(1); }

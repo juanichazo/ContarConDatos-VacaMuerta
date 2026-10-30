@@ -152,7 +152,7 @@ const cambiosDueno = {
         <li><b>nov-2025</b> Pluspetrol → Continental Resources, EE.UU. (Los Toldos II Oeste, 90%)</li>
         <li><b>may-2026</b> Equinor → Vista (Bandurria Sur 30%, Bajo del Toro Norte 50%); PAE → Continental (18–20% en tres áreas)</li>
       </ul>
-      <p class="nota">Cambiá la fecha con el selector "Dueños a". Clasificación: Vista (sede legal en México) y PAE (BP 50% + Bridas) van como "mixto"; Tecpetrol (Techint) como argentina. Con otro criterio los porcentajes cambian; ver reports/controles_propiedad.md.</p>`;
+      <p class="nota">Clasificación: Vista (sede legal en México) y PAE (BP 50% + Bridas) van como "mixto"; Tecpetrol (Techint) como argentina. Con otro criterio los porcentajes cambian; ver reports/controles_propiedad.md.</p>`;
   },
 
   charts: () => {
@@ -171,13 +171,13 @@ const cambiosDueno = {
 
 // ---------- 4. A dónde va el valor de la producción ----------
 const COLOR_SANKEY = {
-  arena: VIOLETA,
-  inversion: '#BDA9E8',
+  arena: '#C7801F',
+  inversion: '#E7B866',
   vm: '#222',
   petroleo: AZUL,
   gas: '#9DB8E8',
-  exp: '#4B3A8C',
-  int: '#A58FD9',
+  exp: '#2C56A8',
+  int: '#7FA3DD',
 };
 
 // arma los nodos y bandas del Sankey, todo en USD de 2025
@@ -289,7 +289,7 @@ const barril = {
         key: p,
         value: b[k][p] / b[k].fob * 100,
         color: COLOR_BARRIL[p],
-        texto: p === 'empresa' ? '#222' : '#fff',
+        texto: p === 'neuquen' ? '#fff' : '#222',
       })),
     }));
     barriles('#ch5', filas);
@@ -344,7 +344,7 @@ const arenaAgua = {
       <p class="dato">La arena equivale a ${num(camiones)} viajes de camión de 38 t, ${num(camiones / 365)} por día. Con el agua se llenan ${num(piletas)} piletas olímpicas.</p>
       ${costo}
       <p class="dato">Desde ${ini.anio} los pozos fracturados se multiplicaron por ${num(fin.pozos / ini.pozos, 1)}, pero la arena por ${num(fin.arena_t / ini.arena_t, 1)}: cada pozo usa ${vi(num(masArena, 0) + '% más arena')} y ${az(num(masAgua, 0) + '% más agua')} que en ${ini.anio}.</p>
-      <h3>${fin.anio} comparado con ${ini.anio}, cuántas veces más</h3>
+      <h3>${fin.anio} comparado con ${ini.anio}: cada ícono es lo que se usó en ${ini.anio}</h3>
       <div class="ch" id="ch6"></div>
       <h3>Por pozo fracturado</h3>
       <div class="ch" id="ch6b"></div>
@@ -362,7 +362,7 @@ const arenaAgua = {
       { label: 'Arena (camiones)', value: fin.arena_t / ini.arena_t, icono: 'camion', color: VIOLETA },
       { label: 'Agua', value: fin.agua_m3 / ini.agua_m3, icono: 'gota', color: AZUL },
     ];
-    iconos('#ch6', filas, { anioIni: ini.anio, anioFin: fin.anio });
+    iconos('#ch6', filas);
 
     // tabla: arena, agua y etapas por pozo en el primer y el último año
     const porPozo = [

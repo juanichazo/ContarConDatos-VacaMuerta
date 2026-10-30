@@ -1,18 +1,19 @@
 // Colores. Todo el resto los lee de acá.
 // Regla: azul primero, violeta segundo, rojo solo para la quema o cuando hace falta un tercer color.
 export const AZUL = '#3D6CC4';
-export const VIOLETA = '#8462C9';
-export const ROJO = '#D0342C';
+export const VIOLETA = '#F0A53A'; // ámbar (el nombre quedó por compatibilidad: es el segundo color)
+export const ROJO = '#FF5638';   // quema (naranja brasa)
+export const CARMIN = '#B3243A'; // capital con sede afuera
 export const NEUTRO = '#7C879C'; // pozos cuando el tema del paso es otro (por ejemplo, la quema)
 
 export const CAT_COLORS = {
   'Argentina': AZUL,
   'Mixto': VIOLETA,
   // capital con sede afuera: tonos de rojo
-  'EE.UU.': ROJO,
-  'Europa': '#E5806A',
-  'Asia y Medio Oriente': '#982B3B',
-  'Latinoamérica': '#F1B2A4',
+  'EE.UU.': CARMIN,
+  'Europa': '#D4566A',
+  'Asia y Medio Oriente': '#7E1A2E',
+  'Latinoamérica': '#E89AA6',
   'Otros': '#8A8F94',
 };
 
@@ -21,14 +22,14 @@ export const GRUPO_COLORS = {
   // argentinas: azules
   'YPF': '#2C56A8', 'Pluspetrol': '#5B8FE0', 'Tecpetrol': '#8DB3F0', 'Pampa Energía': '#3F7FCF',
   'Capex': '#A9C6F2', 'GyP (Neuquén)': '#6C86B8', 'Otras argentinas': '#C2D4EE',
-  // mixtas: violetas
-  'Vista': '#7A55C2', 'PAE': '#B79BE6',
+  // mixtas: ámbar
+  'Vista': '#E8952A', 'PAE': '#F5C27A',
   // extranjeras: rojos
-  'Chevron': '#C0312B', 'ExxonMobil': '#E26E62', 'Continental Resources': '#F2A39C', 'Dow': '#8F2420', 'ConocoPhillips': '#E8857E',
-  'Shell': '#D9573E', 'TotalEnergies': '#B8452F', 'Equinor': '#F0B9A8', 'Harbour Energy': '#A33A2A', 'Wintershall Dea': '#A33A2A',
-  'Phoenix': '#F6CFC4', 'Interoil': '#DA8C79',
-  'Petronas': '#982B3B', 'QatarEnergy': '#C45A6A',
-  'GeoPark': '#F1B2A4', 'Petrobras': '#E7998A',
+  'Chevron': '#B3243A', 'ExxonMobil': '#D4566A', 'Continental Resources': '#E68A99', 'Dow': '#7E1A2E', 'ConocoPhillips': '#C9405A',
+  'Shell': '#C2364E', 'TotalEnergies': '#9E2034', 'Equinor': '#EDB0BA', 'Harbour Energy': '#8A1E33', 'Wintershall Dea': '#8A1E33',
+  'Phoenix': '#F2C7CE', 'Interoil': '#D9798A',
+  'Petronas': '#6E1628', 'QatarEnergy': '#B0485C',
+  'GeoPark': '#E89AA6', 'Petrobras': '#DD8494',
 };
 
 // colores de la interfaz sobre el mapa oscuro

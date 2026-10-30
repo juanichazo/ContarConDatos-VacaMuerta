@@ -236,8 +236,8 @@ export function sankey(el, nodos, links, { w = 400, h = 320, margenDer = 140, ti
     .join('path')
     .attr('d', sankeyLinkHorizontal())
     // las bandas que llegan a la última columna toman el color de su destino
-    .attr('stroke', d => (d.target.depth === ultimaColumna ? d.target.color : d.source.color))
-    .attr('stroke-opacity', 0.3)
+    .attr('stroke', d => (d.source.depth === 0 ? d.source.color : d.target.color))
+    .attr('stroke-opacity', 0.38)
     .attr('stroke-width', d => Math.max(1, d.width))
     .append('title')
     .text(d => `${d.source.label} → ${d.target.label}: ${fmtValor(d.value)}`);
@@ -370,7 +370,7 @@ export function barriles(el, filas, { w = 420, h = 175, anchoBarril = 80 } = {})
 // filas: [{label, value (veces), icono, color}]. Arriba el año base (1 ícono), abajo el año final.
 const ICONOS = {
   // torre de perforación
-  pozo: 'M9 1 L15 17 H12.5 L11.6 14 H6.4 L5.5 17 H3 Z M7.1 11.5 H10.9 L10 8.5 H8 Z',
+  pozo: 'M1 16 H17 V18 H1 Z M6 16 L8.6 7 L9.6 7 L7.4 16 Z M12.4 16 L9.4 7 L10.4 7 L13.8 16 Z M2 7.6 L15 4 L15.5 5.7 L2.5 9.3 Z M14.6 3.3 L17.6 2.8 L17.8 8.2 L15.2 6.3 Z M16.9 7.6 H17.6 V16 H16.9 Z M0.6 8.6 H4.2 V12 H0.6 Z',
   // fractura: rayo
   etapa: 'M10 1 L3 10 H8 L6.5 17 L14 7 H9 Z',
   // camión
@@ -380,35 +380,31 @@ const ICONOS = {
 };
 let idIcono = 0;
 
-export function iconos(el, filas, { w = 420, anioIni = 2019, anioFin = 2025 } = {}) {
-  const escala = 1.25;
+export function iconos(el, filas, { w = 420 } = {}) {
+  const escala = 1.7;
   const lado = 18 * escala;
-  const paso = 30;
-  const labelW = 165;
-  const altoFila = 66;
+  const paso = 38;
+  const labelW = 135;
+  const altoFila = 46;
   const svg = svgBox(el, w, filas.length * altoFila + 4);
 
   filas.forEach((f, n) => {
-    const y0 = n * altoFila + 4;
-    svg.append('text').attr('class', 'lbl').attr('x', 0).attr('y', y0 + 12).attr('font-weight', 600).text(f.label);
-    svg.append('text').attr('class', 'val').attr('x', 0).attr('y', y0 + 28).text('×' + num(f.value, 1));
+    const y = n * altoFila + 6;
+    svg.append('text').attr('class', 'lbl').attr('x', 0).attr('y', y + 14).attr('font-weight', 600).text(f.label);
+    svg.append('text').attr('class', 'val').attr('x', 0).attr('y', y + 29).text('×' + num(f.value, 1));
 
-    [[anioIni, 1], [anioFin, f.value]].forEach(([anio, cant], k) => {
-      const y = y0 + k * 28;
-      svg.append('text').attr('class', 'val').attr('x', labelW - 10).attr('y', y + 16).attr('text-anchor', 'end').text(anio);
-      const enteros = Math.floor(cant);
-      const resto = cant - enteros;
-      for (let i = 0; i < Math.ceil(cant); i++) {
-        const g = svg.append('g').attr('transform', `translate(${labelW + i * paso},${y})`);
-        // el último ícono se corta según la parte decimal
-        if (i === enteros && resto > 0) {
-          const id = `icono-${idIcono++}`;
-          svg.append('clipPath').attr('id', id).append('rect').attr('width', lado * resto).attr('height', lado);
-          g.attr('clip-path', `url(#${id})`);
-        }
-        g.append('path').attr('d', ICONOS[f.icono]).attr('fill', f.color).attr('transform', `scale(${escala})`);
+    const enteros = Math.floor(f.value);
+    const resto = f.value - enteros;
+    for (let i = 0; i < Math.ceil(f.value); i++) {
+      const g = svg.append('g').attr('transform', `translate(${labelW + i * paso},${y})`);
+      // el último ícono se corta según la parte decimal
+      if (i === enteros && resto > 0) {
+        const id = `icono-${idIcono++}`;
+        svg.append('clipPath').attr('id', id).append('rect').attr('width', lado * resto).attr('height', lado);
+        g.attr('clip-path', `url(#${id})`);
       }
-    });
+      g.append('path').attr('d', ICONOS[f.icono]).attr('fill', f.color).attr('transform', `scale(${escala})`);
+    }
   });
   return svg;
 }

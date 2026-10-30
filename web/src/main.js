@@ -329,43 +329,38 @@ function capasFlujos() {
     widthUnits: 'pixels',
     capRounded: true,
   });
+  // La capacidad de cada ducto va debajo del nombre de su destino, en horizontal.
+  // Oldelval: Allen queda pegado a Añelo, así que su capacidad va con Puerto Rosales
+  // (la cifra es de todo el sistema Añelo–Allen–Puerto Rosales).
+  const capacidadEn = {};
+  flujos.filter(f => f.capacidad !== '').forEach(f => {
+    let nodo = f.hasta;
+    if (f.id === 'oldelval') nodo = 'puerto_rosales';
+    if (f.producto === 'arena') nodo = f.desde; // la arena sale de Ibicuy
+    const texto = f.id === 'oldelval' ? 'Oldelval: 530.000 bbl/día' : f.capacidad;
+    capacidadEn[nodo] = texto;
+  });
+
   const etiquetas = new TextLayer({
     id: 'nodos',
     data: META.nodos.filter(n => !NODOS_SIN_NOMBRE.includes(n.id)),
     getPosition: n => [n.lon, n.lat],
-    getText: n => n.nombre,
+    getText: n => (capacidadEn[n.id] ? `${n.nombre}\n${capacidadEn[n.id]}` : n.nombre),
     getSize: 12,
-    getColor: [211, 215, 224],
-    getTextAnchor: 'start',
-    getPixelOffset: [6, 0],
+    getColor: [237, 228, 214],
+    // los destinos del oeste (Chile) van con el texto a la izquierda, para no tapar la cuenca
+    getTextAnchor: n => (n.lon < -70 ? 'end' : 'start'),
+    getAlignmentBaseline: 'center',
+    getPixelOffset: n => (n.lon < -70 ? [-8, 0] : [8, 0]),
+    lineHeight: 1.3,
     background: true,
-    getBackgroundColor: [22, 27, 41, 220],
-    fontFamily: 'system-ui, sans-serif',
+    getBackgroundColor: [26, 20, 22, 230],
+    backgroundPadding: [6, 4],
+    fontFamily: 'Inter, system-ui, sans-serif',
     characterSet: 'auto',
-  });
-  // capacidad de cada ducto (de una fuente publicada) en la mitad de la línea
-  const conNumero = flujos.filter(f => f.capacidad !== '');
-  const numeros = new TextLayer({
-    id: 'flujos-num',
-    data: conNumero,
-    getPosition: f => [(f.camino[0][0] + f.camino[1][0]) / 2, (f.camino[0][1] + f.camino[1][1]) / 2],
-    getText: f => f.capacidad,
-    getSize: 11,
-    getColor: [240, 242, 247],
-    // texto paralelo a la línea, sobre una caja oscura con borde del color del ducto
-    getAngle: anguloLinea,
-    getPixelOffset: [0, -11],
-    background: true,
-    getBackgroundColor: [16, 20, 31, 235],
-    getBorderColor: f => colorProducto(f.producto),
-    getBorderWidth: 1,
-    backgroundPadding: [4, 2],
-    fontFamily: 'system-ui, sans-serif',
-    characterSet: 'auto',
-    // que el texto quede siempre por encima de las líneas
     parameters: { depthCompare: 'always', depthWriteEnabled: false },
   });
-  return [lineas, etiquetas, numeros];
+  return [lineas, etiquetas];
 }
 
 function capas() {
@@ -379,6 +374,7 @@ function capas() {
 }
 
 function render() {
+  llenarFiltros();
   overlay.setProps({ layers: capas(), getTooltip: null });
   leyendaMapa();
   syncControles();
@@ -541,7 +537,6 @@ function syncControles() {
       b.setAttribute('aria-pressed', S[seg.dataset.ctl] === b.dataset.v);
     });
   });
-  document.getElementById('foto').value = S.foto;
   document.getElementById('tam').value = S.tam;
   document.getElementById('fEmp').value = S.filtro.emp;
   document.getElementById('fPais').value = S.filtro.pais;
@@ -563,11 +558,6 @@ document.querySelectorAll('.seg').forEach(seg => {
   });
 });
 
-document.getElementById('foto').addEventListener('change', e => {
-  S.foto = e.target.value;
-  render();
-  pintarPaso();
-});
 
 document.getElementById('tam').addEventListener('change', e => {
   S.tam = e.target.value;
@@ -577,12 +567,29 @@ document.getElementById('tam').addEventListener('change', e => {
 // filtros: las opciones salen de la lista de grupos
 const selEmp = document.getElementById('fEmp');
 const selPais = document.getElementById('fPais');
-[...G].sort((a, b) => a.nombre.localeCompare(b.nombre)).forEach(g => {
-  selEmp.add(new Option(g.nombre, g.nombre));
-});
-[...new Set(G.map(g => g.pais).filter(Boolean))].sort().forEach(pais => {
-  selPais.add(new Option(pais, pais));
-});
+// Los filtros solo ofrecen empresas y países que tienen pozos en el mapa con la vista actual:
+// en "Operador", los que operan algún pozo que produjo en 2025; en "Dueños", los dueños (dic-2025).
+let vistaFiltros = null;
+function llenarFiltros() {
+  if (vistaFiltros === S.view) return;
+  vistaFiltros = S.view;
+  const enMapa = new Set();
+  pozosVis.filter(p => p.pet25 + p.gas25 > 0).forEach(p => {
+    if (S.view === 'dueno') duenosDe(p).forEach(([gi]) => enMapa.add(gi));
+    else enMapa.add(p.op);
+  });
+  const grupos = G.filter(g => enMapa.has(g.i)).sort((a, b) => a.nombre.localeCompare(b.nombre));
+  const paises = [...new Set(grupos.map(g => g.pais).filter(Boolean))].sort();
+
+  selEmp.length = 1;
+  grupos.forEach(g => selEmp.add(new Option(g.nombre, g.nombre)));
+  selPais.length = 1;
+  paises.forEach(pais => selPais.add(new Option(pais, pais)));
+
+  // si lo elegido ya no está en la lista, se saca el filtro
+  if (!grupos.some(g => g.nombre === S.filtro.emp)) S.filtro.emp = '';
+  if (!paises.includes(S.filtro.pais)) S.filtro.pais = '';
+}
 selEmp.addEventListener('change', () => {
   S.filtro.emp = selEmp.value;
   render();
@@ -590,6 +597,7 @@ selEmp.addEventListener('change', () => {
 selPais.addEventListener('change', () => {
   S.filtro.pais = selPais.value;
   render();
+  zoomAlFiltro();
 });
 
 document.querySelectorAll('[data-capa]').forEach(c => {
@@ -609,6 +617,21 @@ PASOS.forEach((p, i) => {
   b.onclick = () => irA(i);
   pasosNav.appendChild(b);
 });
+
+// acerca el mapa a los pozos que pasan el filtro; sin filtro, vuelve a la vista del paso
+function zoomAlFiltro() {
+  if (!hayFiltro()) {
+    const v = PASOS[S.paso].mapa.vista;
+    map.flyTo({ ...v, zoom: v.zoom - (pantallaAngosta() ? 0.9 : 0), duration: 1000 });
+    return;
+  }
+  const elegidos = pozosVis.filter(p => parteFiltro(p) > 0);
+  if (!elegidos.length) return;
+  const lons = elegidos.map(p => p.lon);
+  const lats = elegidos.map(p => p.lat);
+  const caja = [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
+  map.fitBounds(caja, { padding: 80, maxZoom: 10, duration: 1000 });
+}
 
 function irA(i, volar = true) {
   S.paso = Math.max(0, Math.min(PASOS.length - 1, i));
