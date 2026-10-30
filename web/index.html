@@ -3,14 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vaca Muerta 2025 – explorador (borrador)</title>
+<title>Vaca Muerta 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="app">
   <header id="top">
     <div class="titulo">
       <h1>Vaca Muerta 2025</h1>
-      <span class="sub">Producción, propiedad, insumos y destino · borrador sin diseño final</span>
+      <span class="sub">Producción, dueños, insumos y quema</span>
     </div>
     <div class="controles">
       <div class="seg" data-ctl="unit"><button data-v="fis">Unidades físicas</button><button data-v="usd">USD</button></div>
@@ -19,20 +22,21 @@
       <label class="foto">Dueños a <select id="foto">
         <option value="2020-12">dic-2020</option><option value="2023-12">dic-2023</option>
         <option value="2025-12">dic-2025</option><option value="2026-10">oct-2026</option></select></label>
-      <label class="foto">Empresa <select id="fEmp"><option value="">Todas</option></select></label>
-      <label class="foto">País <select id="fPais"><option value="">Todos</option></select></label>
     </div>
   </header>
   <main>
     <section id="mapwrap">
       <div id="map"></div>
       <div id="legend"></div>
-      <details id="capas" open><summary>Capas</summary>
+      <details id="capas" open><summary>Capas y filtros</summary>
+        <div class="col">
         <label><input type="checkbox" data-capa="areas" checked> Áreas</label>
-        <label><input type="checkbox" data-capa="ductos"> Ductos</label>
+        <label><input type="checkbox" data-capa="ductos"> Ductos y flujos nacionales</label>
         <label><input type="checkbox" data-capa="quema"> Quema (satélite)</label>
-        <label><input type="checkbox" data-capa="flujos"> Flujos nacionales</label>
         <label>Tamaño <select id="tam"><option value="pet">Petróleo 2025</option><option value="gas">Gas 2025</option><option value="usd">Valor 2025 (USD)</option><option value="arena">Arena de fractura</option></select></label>
+        <label>Empresa <select id="fEmp"><option value="">Todas</option></select></label>
+        <label>País <select id="fPais"><option value="">Todos</option></select></label>
+        </div>
       </details>
       <div id="tip" hidden></div>
     </section>

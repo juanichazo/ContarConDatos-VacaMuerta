@@ -6,13 +6,13 @@
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { MapboxOverlay } from '@deck.gl/mapbox';
-import { ScatterplotLayer, GeoJsonLayer, ArcLayer, TextLayer } from '@deck.gl/layers';
-import { PathStyleExtension } from '@deck.gl/extensions';
+import { ScatterplotLayer, GeoJsonLayer, PathLayer, TextLayer } from '@deck.gl/layers';
+import { PathStyleExtension, FillStyleExtension } from '@deck.gl/extensions';
 import * as d3 from 'd3';
 import { feature } from 'topojson-client';
 import world from 'world-atlas/countries-50m.json';
 import './style.css';
-import { UI, hex2rgb } from './theme.js';
+import { UI, hex2rgb, VIOLETA, NEUTRO, ROJO } from './theme.js';
 import { leyenda, num, fmt } from './charts.js';
 import {
   META, G, AP, PR, FOTOS, TOT, areasGJ, ductosGJ, pozosVis, quema, nodos,
@@ -25,22 +25,14 @@ import { PASOS } from './pasos.js';
 
 
 // ---------- color y tamaño de los pozos ----------
-const BLANCO = [255, 255, 255, 160];
+const BLANCO = [...UI.borde_pozo, 170]; // borde fino de los pozos (oscuro, sobre mapa oscuro)
 
 function rellenoPozo(p) {
-  const gi = S.view === 'dueno' ? duenosDe(p)[0][0] : p.op;
-  return hex2rgb(colorDe(gi));
+  // el punto siempre muestra al operador; el dueño se ve en el sombreado del área
+  return hex2rgb(colorDe(p.op));
 }
 
-const APAGADO = [175, 175, 175, 35]; // pozos que no pasan el filtro
-
-// en la vista "dueño", el segundo dueño (si tiene 20% o más) se dibuja como
-// un anillo por fuera del círculo, así no tapa el color del dueño principal
-function segundoDueno(p) {
-  const d = duenosDe(p);
-  if (d.length > 1 && d[1][1] >= 0.2) return d[1][0];
-  return null;
-}
+const APAGADO = [120, 128, 145, 30]; // pozos que no pasan el filtro
 
 function tamVal(p) {
   if (S.tam === 'gas') return p.gas25;
@@ -120,11 +112,11 @@ function capaAreas() {
       if (S.view !== 'dueno') return [255, 255, 255, 0];
       const fo = f.properties.fotos?.[S.foto];
       if (!fo || !fo.length) return [255, 255, 255, 0];
-      return [...hex2rgb(colorDe(fo[0][0])), 38];
+      return [...hex2rgb(colorDe(fo[0][0])), 110];
     },
     getLineColor: f => {
-      const resaltada = S.hover?.tipo === 'area' && S.hover.i === f.properties.i;
-      return resaltada ? [20, 20, 20, 255] : [...UI.area, 110];
+      const resaltada = S.hover?.tipo === 'areas' && S.hover.i === f.properties.i;
+      return resaltada ? [255, 255, 255, 230] : [...UI.area, 110];
     },
     getLineWidth: 1,
     lineWidthUnits: 'pixels',
@@ -144,11 +136,9 @@ function capaDuctos() {
     data: ductosGJ,
     pickable: true,
     lineWidthUnits: 'pixels',
-    getLineColor: f => (esPetroleo(f) ? [...UI.ducto_pet, 220] : [...UI.ducto_gas, 230]),
-    getLineWidth: f => (esPetroleo(f) ? 2.2 : 2),
-    getDashArray: f => (esPetroleo(f) ? [0, 0] : [3, 2]),
-    dashJustified: true,
-    extensions: [new PathStyleExtension({ dash: true })],
+    getLineColor: f => (esPetroleo(f) ? COLOR_PETROLEO : COLOR_GAS),
+    // el Perito Moreno es un ducto principal: va más grueso
+    getLineWidth: f => (esPeritoMoreno(f) ? ANCHO_PRINCIPAL : 1.6),
   });
 }
 
@@ -185,33 +175,86 @@ function capaPozos() {
   });
 }
 
-// anillo del segundo dueño (solo en la vista "dueño")
-function capaSegundoDueno() {
-  const conSegundo = pozosVis.filter(p => segundoDueno(p) !== null && parteFiltro(p) > 0);
-  return new ScatterplotLayer({
-    id: 'pozos-segundo',
-    data: conSegundo,
-    pickable: false,
-    filled: false,
-    stroked: true,
-    radiusUnits: 'pixels',
-    lineWidthUnits: 'pixels',
-    getPosition: p => [p.lon, p.lat],
-    // el anillo queda por fuera del círculo: radio + medio ancho de línea
-    getRadius: p => rScale(tamVal(p)) + 0.5 + anchoAnillo(p) / 2,
-    getLineWidth: anchoAnillo,
-    getLineColor: p => [...hex2rgb(colorDe(segundoDueno(p))), 235],
-    updateTriggers: {
-      getRadius: [S.tam],
-      getLineWidth: [S.tam],
-      getLineColor: [S.foto, S.color],
-    },
+// ---------- rayas del segundo dueño ----------
+// Los dueños son de cada área, así que el segundo dueño se muestra en el área:
+// rayas diagonales de su color, más gruesas cuanto mayor es su parte.
+// Las rayas se dibujan una vez en un canvas chico (el "atlas") y deck.gl las repite.
+const LADO = 16;
+const GROSORES = { fino: 2, medio: 4, grueso: 7 };
+
+function atlasRayas() {
+  const c = document.createElement('canvas');
+  c.width = LADO * 3;
+  c.height = LADO;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff';
+  Object.values(GROSORES).forEach((grosor, i) => {
+    ctx.save();
+    ctx.translate(i * LADO, 0);
+    ctx.beginPath();
+    ctx.rect(0, 0, LADO, LADO);
+    ctx.clip();
+    // tres diagonales para que el dibujo empalme al repetirse
+    ctx.lineWidth = grosor;
+    ctx.strokeStyle = '#fff';
+    [-LADO, 0, LADO].forEach(d => {
+      ctx.beginPath();
+      ctx.moveTo(d, LADO);
+      ctx.lineTo(d + LADO, 0);
+      ctx.stroke();
+    });
+    ctx.restore();
   });
+  return c.toDataURL();
 }
 
-// anillo más fino en los pozos chicos, para que no se coma el círculo
-function anchoAnillo(p) {
-  return Math.min(1.6, 0.5 + 0.18 * rScale(tamVal(p)));
+const ATLAS_RAYAS = atlasRayas();
+const MAPA_RAYAS = {
+  fino: { x: 0, y: 0, width: LADO, height: LADO, mask: true },
+  medio: { x: LADO, y: 0, width: LADO, height: LADO, mask: true },
+  grueso: { x: LADO * 2, y: 0, width: LADO, height: LADO, mask: true },
+};
+
+// segundo dueño del área en la fecha elegida: [grupo, parte] o null (menos de 10%: no se marca)
+function segundoDelArea(f) {
+  const fo = f.properties.fotos?.[S.foto];
+  if (!fo || fo.length < 2 || fo[1][1] < 0.1) return null;
+  return fo[1];
+}
+
+function grosorRayas(parte) {
+  if (parte < 0.25) return 'fino';
+  if (parte < 0.4) return 'medio';
+  return 'grueso';
+}
+
+function zoomActual() {
+  return map.getZoom();
+}
+
+function capaRayas() {
+  const conSegundo = areasGJ.features.filter(f => segundoDelArea(f) !== null);
+  return new GeoJsonLayer({
+    id: 'areas-rayas',
+    data: conSegundo,
+    pickable: false,
+    stroked: false,
+    filled: true,
+    getFillColor: f => [...hex2rgb(colorDe(segundoDelArea(f)[0])), 175],
+    fillPatternAtlas: ATLAS_RAYAS,
+    fillPatternMapping: MAPA_RAYAS,
+    fillPatternMask: true,
+    getFillPattern: f => grosorRayas(segundoDelArea(f)[1]),
+    // la trama se escala con el zoom para que en pantalla siempre se vea igual
+    getFillPatternScale: 1.6 * Math.pow(2, 7.4 - zoomActual()),
+    getFillPatternOffset: [0, 0],
+    extensions: [new FillStyleExtension({ pattern: true })],
+    updateTriggers: {
+      getFillColor: [S.foto, S.color],
+      getFillPattern: [S.foto],
+      getFillPatternScale: [Math.round(zoomActual() * 4)],
+    },
+  });
 }
 
 function capasQuema() {
@@ -222,8 +265,9 @@ function capasQuema() {
     data: quema,
     radiusUnits: 'pixels',
     getPosition: q => [q.lon, q.lat],
-    getRadius: q => rq(q.vol) * 1.9,
-    getFillColor: [...UI.quema, 45],
+    // halo grande y transparente: da el efecto de brillo
+    getRadius: q => rq(q.vol) * 2.2,
+    getFillColor: [...UI.quema, 50],
   });
   const puntos = new ScatterplotLayer({
     id: 'quema',
@@ -234,22 +278,38 @@ function capasQuema() {
     lineWidthUnits: 'pixels',
     getPosition: q => [q.lon, q.lat],
     getRadius: q => rq(q.vol),
-    getFillColor: [...UI.quema, 210],
-    getLineColor: [120, 40, 0, 255],
-    getLineWidth: 1,
+    getFillColor: [...UI.quema, 225],
+    getLineColor: [255, 196, 176, 255],
+    getLineWidth: 0.8,
   });
   return [halo, puntos];
 }
 
-// arcos del paso 4: de dónde viene la arena y a dónde va el petróleo y el gas
-function colorFlujo(f) {
-  if (f.producto === 'arena') return [176, 138, 80, 230];
-  if (f.producto === 'gas') return [110, 110, 110, 220];
-  return [25, 25, 25, 230];
-}
+// Ductos nacionales (fuera de Neuquén) y la ruta de la arena.
+// Mismo estilo que los ductos de la provincia (continuo = petróleo, punteado = gas),
+// pero en violeta para distinguirlos. La arena va con puntos cortos.
+// un color por producto; los ductos principales (nacionales) van más gruesos
+const COLOR_PETROLEO = [215, 220, 232, 230];
+const COLOR_GAS = [...UI.ducto_gas, 235];
+const COLOR_ARENA = [214, 186, 130, 230];
+const ANCHO_PRINCIPAL = 4;
+const colorProducto = p => (p === 'arena' ? COLOR_ARENA : p === 'gas' ? COLOR_GAS : COLOR_PETROLEO);
+
+// El gasoducto Perito Moreno ya viene completo (hasta Salliqueló) en la capa de Neuquén:
+// no se dibuja otra vez; ese tramo se pinta con el color de los ductos nacionales.
+const esPeritoMoreno = f => (f.properties.n || '').includes('PERITO');
 
 // estos nodos quedan muy pegados a otros y no llevan etiqueta
 const NODOS_SIN_NOMBRE = ['anelo', 'allen', 'tratayen', 'puesto_hernandez'];
+
+// ángulo de la línea en pantalla, sin dar vuelta el texto
+function anguloLinea(f) {
+  const [a, b] = f.camino;
+  let ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+  if (ang > 90) ang -= 180;
+  if (ang < -90) ang += 180;
+  return ang;
+}
 
 function capasFlujos() {
   const flujos = META.flujos.map(f => ({
@@ -257,20 +317,17 @@ function capasFlujos() {
     a: nodos[f.desde],
     b: nodos[f.hasta],
   }));
+  flujos.forEach(f => { f.camino = [[f.a.lon, f.a.lat], [f.b.lon, f.b.lat]]; });
 
-  const arcos = new ArcLayer({
+  const lineas = new PathLayer({
     id: 'flujos',
-    data: flujos,
+    data: flujos.filter(f => f.id !== 'perito_moreno'),
     pickable: true,
-    getSourcePosition: f => [f.a.lon, f.a.lat],
-    getTargetPosition: f => [f.b.lon, f.b.lat],
-    getSourceColor: colorFlujo,
-    getTargetColor: colorFlujo,
-    // todas las líneas del mismo ancho: no hay datos medidos de cuánto pasa por cada una
-    getWidth: 4,
+    getPath: f => f.camino,
+    getColor: f => colorProducto(f.producto),
+    getWidth: ANCHO_PRINCIPAL,
     widthUnits: 'pixels',
-    getHeight: 0.35,
-    greatCircle: false,
+    capRounded: true,
   });
   const etiquetas = new TextLayer({
     id: 'nodos',
@@ -278,11 +335,11 @@ function capasFlujos() {
     getPosition: n => [n.lon, n.lat],
     getText: n => n.nombre,
     getSize: 12,
-    getColor: [30, 30, 30],
+    getColor: [211, 215, 224],
     getTextAnchor: 'start',
     getPixelOffset: [6, 0],
     background: true,
-    getBackgroundColor: [255, 255, 255, 200],
+    getBackgroundColor: [22, 27, 41, 220],
     fontFamily: 'system-ui, sans-serif',
     characterSet: 'auto',
   });
@@ -291,30 +348,33 @@ function capasFlujos() {
   const numeros = new TextLayer({
     id: 'flujos-num',
     data: conNumero,
-    getPosition: f => [(f.a.lon + f.b.lon) / 2, (f.a.lat + f.b.lat) / 2],
+    getPosition: f => [(f.camino[0][0] + f.camino[1][0]) / 2, (f.camino[0][1] + f.camino[1][1]) / 2],
     getText: f => f.capacidad,
-    getSize: 12,
-    getColor: [20, 20, 20],
-    fontWeight: 700,
+    getSize: 11,
+    getColor: [240, 242, 247],
+    // texto paralelo a la línea, sobre una caja oscura con borde del color del ducto
+    getAngle: anguloLinea,
+    getPixelOffset: [0, -11],
     background: true,
-    getBackgroundColor: [255, 255, 255, 235],
-    backgroundPadding: [3, 1],
+    getBackgroundColor: [16, 20, 31, 235],
+    getBorderColor: f => colorProducto(f.producto),
+    getBorderWidth: 1,
+    backgroundPadding: [4, 2],
     fontFamily: 'system-ui, sans-serif',
     characterSet: 'auto',
-    // que el texto quede siempre por encima de los arcos
+    // que el texto quede siempre por encima de las líneas
     parameters: { depthCompare: 'always', depthWriteEnabled: false },
   });
-  return [arcos, etiquetas, numeros];
+  return [lineas, etiquetas, numeros];
 }
 
 function capas() {
   const L = [];
   if (S.capas.areas) L.push(capaAreas());
-  if (S.capas.ductos) L.push(capaDuctos());
+  // la capa "Ductos" incluye los de Neuquén y los nacionales
+  if (S.capas.ductos) L.push(capaDuctos(), ...capasFlujos());
   L.push(capaPozos());
-  if (S.view === 'dueno') L.push(capaSegundoDueno());
   if (S.capas.quema) L.push(...capasQuema());
-  if (S.capas.flujos) L.push(...capasFlujos());
   return L;
 }
 
@@ -406,16 +466,23 @@ function leyendaMapa() {
   el.innerHTML = '';
 
   let color = S.view === 'dueno'
-    ? `Color: dueño principal (${FOTOS[S.foto]}); anillo: segundo dueño ≥20%`
+    ? `Sombreado del área: dueño principal (${FOTOS[S.foto]}) · punto: operador`
     : 'Color: operador 2025';
-  color += S.color === 'cat' ? ' · por origen del capital' : ' · por empresa';
+  if (S.color === 'cat') color += ' · por origen del capital';
+  if (S.color === 'grupo') color += ' · por empresa';
+  // en el paso de la quema los pozos van en gris para que se lea el rojo
+  if (S.color === 'neutro') color = 'Pozos de Vaca Muerta';
 
   const titulo = document.createElement('div');
   titulo.className = 'lt';
   titulo.textContent = color;
   el.appendChild(titulo);
 
-  if (S.color === 'cat') {
+  if (S.color === 'neutro') {
+    const items = [{ label: 'Pozo', color: NEUTRO }];
+    if (S.capas.quema) items.push({ label: 'Antorcha (satélite)', color: ROJO });
+    leyenda(el, items);
+  } else if (S.color === 'cat') {
     const cats = META.categorias.filter(c => c !== 'Otros');
     leyenda(el, cats.map(c => ({ label: c, color: colorCat(c) })));
   } else {
@@ -431,6 +498,18 @@ function leyendaMapa() {
   if (S.tam === 'usd') {
     tam = `valor 2025 (USD; petróleo a ${num(PR.pet_usd_bbl, 2)} USD/bbl, gas a ${num(PR.gas_usd_mmbtu, 1)} USD/MMBTU)`;
   }
+  if (S.capas.ductos) {
+    leyenda(el, [
+      { label: 'Petróleo', color: '#D7DCE8' },
+      { label: 'Gas', color: '#6EA5EB' },
+      { label: 'Arena', color: '#D6BA82' },
+    ]);
+    const nota = document.createElement('div');
+    nota.className = 'lt m';
+    nota.textContent = 'Línea gruesa: ducto o ruta principal (nacional)';
+    el.appendChild(nota);
+  }
+
   const tamano = document.createElement('div');
   tamano.className = 'lt m';
   tamano.textContent = `Tamaño: ${tam}`;
@@ -640,4 +719,6 @@ if (window.matchMedia('(max-width: 860px)').matches) {
   document.getElementById('capas').open = false;
 }
 map.on('load', () => irA(0, false));
+// al cambiar el zoom se rehacen las rayas (solo si se ven)
+
 window.addEventListener('resize', () => map.resize());

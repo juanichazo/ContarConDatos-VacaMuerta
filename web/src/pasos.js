@@ -4,13 +4,19 @@
 //   html:   texto del panel (se recalcula cuando cambia un control)
 //   charts: dibuja los gráficos dentro de los <div> que dejó html
 import * as d3 from 'd3';
-import { barras, dumbbell, apiladas, leyenda, sankey, num, fmt } from './charts.js';
+import { barras, dumbbell, apiladas, barriles, iconos, leyenda, sankey, num, fmt } from './charts.js';
+import { AZUL, VIOLETA, ROJO } from './theme.js';
 import {
   META, DIN, PR, R, AP, TOT, VAL, FOTOS, EXT, libro, gIdx, porArea, porFoto, shareCat, colorCat,
 } from './datos.js';
 import { S, colorDe, VISTA_CUENCA, VISTA_PAIS } from './estado.js';
 
-const SOLO_AREAS = { areas: true, ductos: false, quema: false, flujos: false };
+const SOLO_AREAS = { areas: true, ductos: false, quema: false };
+
+// resaltado de cifras en el texto (azul, violeta o rojo)
+const az = t => `<span class="m-az">${t}</span>`;
+const vi = t => `<span class="m-vi">${t}</span>`;
+const ro = t => `<span class="m-ro">${t}</span>`;
 
 // % operado y % por participación de cada grupo, en la fecha elegida
 function operadoYDueno() {
@@ -31,8 +37,8 @@ const produccion = {
     const top3 = d3.sum(top.slice(0, 3), d => d.pet) / TOT.pet * 100;
 
     const total = usd
-      ? `${fmt.mmusd(VAL.pet)} en petróleo y ${fmt.mmusd(VAL.gas)} en gas`
-      : `${num(TOT.pet / 1e6, 1)} MMbbl de petróleo y ${num(TOT.gas / 1e3, 1)} bcm de gas`;
+      ? `${az(fmt.mmusd(VAL.pet))} en petróleo y ${vi(fmt.mmusd(VAL.gas))} en gas`
+      : `${az(num(TOT.pet / 1e6, 1) + ' MMbbl')} de petróleo y ${vi(num(TOT.gas / 1e3, 1) + ' bcm')} de gas`;
     const titulo = usd
       ? 'Valor de la producción 2025 por área, USD'
       : 'Petróleo 2025 por área, millones de barriles';
@@ -42,7 +48,7 @@ const produccion = {
 
     return `<h2>Pozos y producción 2025</h2>
       <p class="dato">${num(DIN.kpi.pozos_activos)} pozos de Vaca Muerta produjeron en 2025: ${total}.</p>
-      <p class="dato">${top.slice(0, 3).map(d => d.nombre).join(', ')}: ${num(top3, 0)}% del petróleo.</p>
+      <p class="dato">${top.slice(0, 3).map(d => d.nombre).join(', ')}: ${az(num(top3, 0) + '%')} del petróleo.</p>
       <h3>${titulo} (10 primeras)</h3>
       <div class="ch" id="ch1"></div>
       <p class="nota">Fuente: Capítulo IV (Secretaría de Energía), filtro formación = Vaca Muerta. ${precios}</p>`;
@@ -56,7 +62,7 @@ const produccion = {
     const filas = top.map(d => ({
       label: d.nombre,
       value: usd ? d.usd : d.pet,
-      color: '#555',
+      color: AZUL,
       text: usd ? fmt.musd(d.usd) : num(d.pet / 1e6, 1),
     }));
     barras('#ch1', filas, { labelW: 190 });
@@ -76,12 +82,12 @@ const operadorDueno = {
       : '';
 
     return `<h2>Operador y dueño</h2>
-      <p class="dato">Chevron opera ${num(op.Chevron, 1)}% del petróleo de 2025 y le corresponde ${num(ow.Chevron, 1)}% por participación.</p>
-      <p class="dato">YPF opera ${num(op.YPF, 1)}% y le corresponde ${num(ow.YPF, 1)}%. Vista: ${num(op.Vista, 1)}% → ${num(ow.Vista, 1)}%.</p>
+      <p class="dato">Chevron opera ${az(num(op.Chevron, 1) + '%')} del petróleo de 2025 y le corresponde ${vi(num(ow.Chevron, 1) + '%')} por participación.</p>
+      <p class="dato">YPF opera ${az(num(op.YPF, 1) + '%')} y le corresponde ${vi(num(ow.YPF, 1) + '%')}. Vista: ${az(num(op.Vista, 1) + '%')} → ${vi(num(ow.Vista, 1) + '%')}.</p>
       <h3>Petróleo 2025, % del total: operado vs por participación (dueños a ${FOTOS[S.foto]})</h3>
       <div class="ch" id="ch2"></div>
       ${graficoUsd}
-      <p class="nota">Operado: lo que cada empresa declara como operadora (Capítulo IV). Por participación: producción de cada área × porcentaje de cada socio (capa Areas de Neuquén, corregida con las ventas 2024–2026; ver data/curated/historia_propiedad.csv). En el mapa, color = dueño principal; anillo = segundo dueño.</p>`;
+      <p class="nota">Operado: lo que cada empresa declara como operadora (Capítulo IV). Por participación: producción de cada área × porcentaje de cada socio (capa Areas de Neuquén, corregida con las ventas 2024–2026; ver data/curated/historia_propiedad.csv). En el mapa, el sombreado de cada área es su dueño principal y el color de cada pozo, su operador. El reparto completo entre socios aparece al pasar el mouse por el área.</p>`;
   },
 
   charts: () => {
@@ -132,8 +138,8 @@ const cambiosDueno = {
     const arg26 = shareCat('2026-10', ['Argentina']);
 
     return `<h2>Cambios de dueño 2020–2026</h2>
-      <p class="dato">Mismo petróleo (el de 2025), distintos dueños. Con los dueños de dic-2020, empresas con sede fuera de Argentina tenían ${num(ext20, 1)}%; con los de oct-2026, ${num(ext26, 1)}%.</p>
-      <p class="dato">Capital argentino: ${num(arg20, 1)}% → ${num(arg26, 1)}%. Vista y PAE (gestión argentina, capital mixto): ${num(mix20, 1)}% → ${num(mix26, 1)}%.</p>
+      <p class="dato">Mismo petróleo (el de 2025), distintos dueños. Con los dueños de dic-2020, empresas con sede fuera de Argentina tenían ${ro(num(ext20, 1) + '%')}; con los de oct-2026, ${ro(num(ext26, 1) + '%')}.</p>
+      <p class="dato">Capital argentino: ${az(num(arg20, 1) + '%')} → ${az(num(arg26, 1) + '%')}. Vista y PAE (gestión argentina, capital mixto): ${vi(num(mix20, 1) + '%')} → ${vi(num(mix26, 1) + '%')}.</p>
       <h3>Petróleo 2025 por origen del dueño, según la fecha, %</h3>
       <div class="ch" id="ch3"></div>
       <h3>Ventas que explican el cambio</h3>
@@ -165,13 +171,13 @@ const cambiosDueno = {
 
 // ---------- 4. A dónde va el valor de la producción ----------
 const COLOR_SANKEY = {
-  petroleo: '#333',
-  gas: '#8A8F94',
-  exp: '#5B7C99',
-  int: '#8FA9BF',
-  arena: '#9A7B4F',
-  inversion: '#C2A878',
-  vm: '#1B1E22',
+  arena: VIOLETA,
+  inversion: '#BDA9E8',
+  vm: '#222',
+  petroleo: AZUL,
+  gas: '#9DB8E8',
+  exp: '#4B3A8C',
+  int: '#A58FD9',
 };
 
 // arma los nodos y bandas del Sankey, todo en USD de 2025
@@ -228,14 +234,14 @@ function datosSankey() {
 
 const libroContable = {
   t: 'Qué entra, qué sale y a dónde va',
-  mapa: { view: 'operador', capas: { areas: false, ductos: false, quema: false, flujos: true }, vista: VISTA_PAIS },
+  mapa: { view: 'operador', capas: { areas: false, ductos: true, quema: false }, vista: VISTA_PAIS },
 
   html: () => {
     const d = datosSankey();
 
     return `<h2>Qué entra, qué sale y a dónde va, 2025</h2>
-      <p class="dato">En 2025 entraron ${fmt.musd(d.inversion)} de inversión (${fmt.musd(d.arena)} solo en arena) y salieron ${fmt.musd(d.total)} en petróleo y gas.</p>
-      <p class="dato">El ${num(d.pet / d.total * 100, 0)}% del valor es petróleo. De lo producido, las regalías a Neuquén fueron ${fmt.musd(d.regalias)}: el ${num(d.regalias / d.total * 100, 1)}%.</p>
+      <p class="dato">En 2025 entraron ${vi(fmt.musd(d.inversion))} de inversión (${fmt.musd(d.arena)} solo en arena) y salieron ${az(fmt.musd(d.total))} en petróleo y gas.</p>
+      <p class="dato">El ${num(d.pet / d.total * 100, 0)}% del valor es petróleo. De lo producido, las regalías a Neuquén fueron ${fmt.musd(d.regalias)}: el ${az(num(d.regalias / d.total * 100, 1) + '%')}.</p>
       <h3>Millones de USD de 2025</h3>
       <div class="ch" id="ch4"></div>
       <p class="nota">Entra: inversión 2025 prevista según el IAE Mosconi; la arena (Adjunto IV × US$ 145/t puesta en pozo) se toma como parte de esa inversión. La inversión de un año produce durante muchos años, así que entrada y salida no se restan: sirven para ver el tamaño de cada una. Sale: producción del Capítulo IV × ${num(PR.pet_usd_bbl, 2)} USD/bbl y ${num(PR.gas_usd_mmbtu, 1)} USD/MMBTU. A dónde va: se aplica a Vaca Muerta el % exportado de toda la Cuenca Neuquina (IAE: 29,4% del petróleo y 5,5% del gas); es un supuesto, no un dato de Vaca Muerta. Regalías: IAE. Mapa: trazados esquemáticos; cada línea muestra la capacidad publicada del ducto, no cuánto pasó por él.</p>`;
@@ -249,7 +255,7 @@ const libroContable = {
 
 
 // ---------- 5. Reparto del barril ----------
-const COLOR_BARRIL = { neuquen: '#2F6DB5', nacion: '#8FB5DE', empresa: '#B9B9B4' };
+const COLOR_BARRIL = { neuquen: AZUL, nacion: VIOLETA, empresa: '#DCD9D0' };
 const PARTES_BARRIL = ['neuquen', 'nacion', 'empresa'];
 const REGIMENES = [['int', 'Mercado interno'], ['exp', 'Exportación'], ['rigi', 'RIGI']];
 
@@ -267,7 +273,7 @@ const barril = {
     const regaliasPct = 1450e6 / (VAL.pet + VAL.gas) * 100;
 
     return `<h2>Reparto de cada 1.000 barriles según destino y régimen</h2>
-      <p class="dato">Estado (Neuquén + Nación): ${num(estado('int'), 1)}% si el barril va al mercado interno, ${num(estado('exp'), 1)}% si se exporta y ${num(estado('rigi'), 1)}% si el proyecto está en el RIGI.</p>
+      <p class="dato">Estado (Neuquén + Nación): ${az(num(estado('int'), 1) + '%')} si el barril va al mercado interno, ${az(num(estado('exp'), 1) + '%')} si se exporta y ${az(num(estado('rigi'), 1) + '%')} si el proyecto está en el RIGI.</p>
       <p class="dato">A Neuquén le deja más el mercado interno (US$ ${num(b.int.neuquen)}); a la Nación, la exportación (US$ ${num(b.exp.nacion)}).</p>
       <h3>${titulo}</h3>
       <div class="ch" id="ch5"></div>
@@ -279,9 +285,14 @@ const barril = {
     const filas = REGIMENES.map(([k, label]) => ({
       key: k,
       label,
-      parts: PARTES_BARRIL.map(p => ({ key: p, value: b[k][p] / b[k].fob * 100, color: COLOR_BARRIL[p] })),
+      parts: PARTES_BARRIL.map(p => ({
+        key: p,
+        value: b[k][p] / b[k].fob * 100,
+        color: COLOR_BARRIL[p],
+        texto: p === 'empresa' ? '#222' : '#fff',
+      })),
     }));
-    apiladas('#ch5', filas, { labelW: 120 });
+    barriles('#ch5', filas);
     leyenda('#ch5', [
       { label: 'Neuquén', color: COLOR_BARRIL.neuquen },
       { label: 'Nación', color: COLOR_BARRIL.nacion },
@@ -329,10 +340,10 @@ const arenaAgua = {
       : '';
 
     return `<h2>Arena y agua de fractura ${fin.anio}</h2>
-      <p class="dato">${num(fin.pozos)} pozos fracturados en ${fin.anio} usaron ${num(fin.arena_t / 1e6, 1)} millones de toneladas de arena y ${num(fin.agua_m3 / 1e6, 1)} millones de m³ de agua.</p>
+      <p class="dato">${num(fin.pozos)} pozos fracturados en ${fin.anio} usaron ${vi(num(fin.arena_t / 1e6, 1) + ' millones de toneladas')} de arena y ${az(num(fin.agua_m3 / 1e6, 1) + ' millones de m³')} de agua.</p>
       <p class="dato">La arena equivale a ${num(camiones)} viajes de camión de 38 t, ${num(camiones / 365)} por día. Con el agua se llenan ${num(piletas)} piletas olímpicas.</p>
       ${costo}
-      <p class="dato">Desde ${ini.anio} los pozos fracturados se multiplicaron por ${num(fin.pozos / ini.pozos, 1)}, pero la arena por ${num(fin.arena_t / ini.arena_t, 1)}: cada pozo usa ${num(masArena, 0)}% más arena y ${num(masAgua, 0)}% más agua que en ${ini.anio}.</p>
+      <p class="dato">Desde ${ini.anio} los pozos fracturados se multiplicaron por ${num(fin.pozos / ini.pozos, 1)}, pero la arena por ${num(fin.arena_t / ini.arena_t, 1)}: cada pozo usa ${vi(num(masArena, 0) + '% más arena')} y ${az(num(masAgua, 0) + '% más agua')} que en ${ini.anio}.</p>
       <h3>${fin.anio} comparado con ${ini.anio}, cuántas veces más</h3>
       <div class="ch" id="ch6"></div>
       <h3>Por pozo fracturado</h3>
@@ -346,12 +357,12 @@ const arenaAgua = {
     const fin = serie[serie.length - 1];
 
     const filas = [
-      { label: 'Pozos fracturados', value: fin.pozos / ini.pozos, color: '#777' },
-      { label: 'Etapas de fractura', value: fin.etapas / ini.etapas, color: '#777' },
-      { label: 'Arena', value: fin.arena_t / ini.arena_t, color: '#9A7B4F' },
-      { label: 'Agua', value: fin.agua_m3 / ini.agua_m3, color: '#4F8FC0' },
+      { label: 'Pozos fracturados', value: fin.pozos / ini.pozos, icono: 'pozo', color: '#8A877E' },
+      { label: 'Etapas de fractura', value: fin.etapas / ini.etapas, icono: 'etapa', color: '#8A877E' },
+      { label: 'Arena (camiones)', value: fin.arena_t / ini.arena_t, icono: 'camion', color: VIOLETA },
+      { label: 'Agua', value: fin.agua_m3 / ini.agua_m3, icono: 'gota', color: AZUL },
     ];
-    barras('#ch6', filas.map(f => ({ ...f, text: veces(f.value) })), { labelW: 140 });
+    iconos('#ch6', filas, { anioIni: ini.anio, anioFin: fin.anio });
 
     // tabla: arena, agua y etapas por pozo en el primer y el último año
     const porPozo = [
@@ -385,19 +396,19 @@ function areasPorQuema() {
 
 const quema = {
   t: 'Quema de gas',
-  mapa: { view: 'operador', capas: { areas: true, ductos: true, quema: true, flujos: false }, vista: VISTA_CUENCA },
+  mapa: { view: 'operador', capas: { areas: true, ductos: true, quema: true }, vista: VISTA_CUENCA, color: 'neutro' },
 
   html: () => {
     const s = META.quema_serie.find(r => r.Year === META.anio);
     const top = areasPorQuema()[0];
 
     const valor = S.unit === 'usd'
-      ? ` A ${num(PR.gas_usd_mmbtu, 1)} USD/MMBTU, ese gas valía ${fmt.musd(usdGas(s.vol_mm3))}.`
+      ? ` A ${num(PR.gas_usd_mmbtu, 1)} USD/MMBTU, ese gas valía ${ro(fmt.musd(usdGas(s.vol_mm3)))}.`
       : '';
 
     return `<h2>Gas quemado en antorchas, ${META.anio}</h2>
-      <p class="dato">En ${META.anio} se quemaron ${num(s.vol_mm3)} millones de m³ de gas en antorchas cerca de pozos de Vaca Muerta.${valor}</p>
-      <p class="dato">El área que más quemó fue ${top.nombre}: ${num(top.quema25, 1)} millones de m³.</p>
+      <p class="dato">En ${META.anio} se quemaron ${ro(num(s.vol_mm3) + ' millones de m³')} de gas en antorchas cerca de pozos de Vaca Muerta.${valor}</p>
+      <p class="dato">El área que más quemó fue ${top.nombre}: ${ro(num(top.quema25, 1) + ' millones de m³')}.</p>
       <h3>Gas quemado por área, ${S.unit === 'usd' ? 'millones de USD' : 'millones de m³'} (12 primeras)</h3>
       <div class="ch" id="ch7"></div>
       <p class="nota">Quema: Banco Mundial (Global Flare Monitoring) a partir del satélite VIIRS. No es un dato declarado por las empresas: el satélite mide de noche el calor de cada antorcha y el Banco Mundial lo convierte en volumen. Cada antorcha se asigna al área del pozo de Vaca Muerta más cercano (a menos de 3 km); puede incluir instalaciones convencionales. Ductos de la capa de Neuquén (solo dentro de la provincia).</p>`;
@@ -409,7 +420,7 @@ const quema = {
       return {
         label: a.nombre,
         value: usd ? usdGas(a.quema25) : a.quema25,
-        color: '#E8782A',
+        color: ROJO,
         text: usd ? fmt.musd(usdGas(a.quema25)) : num(a.quema25, 1),
       };
     });

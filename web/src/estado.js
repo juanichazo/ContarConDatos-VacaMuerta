@@ -1,15 +1,16 @@
 // Estado de la web: qué está elegido en los controles y en qué paso estamos.
 // render() en main.js lee esto para dibujar el mapa.
 import { AP, G, colorCat, colorGrupo } from './datos.js';
+import { NEUTRO } from './theme.js';
 
 export const S = {
   unit: 'fis',          // 'fis' (unidades físicas) o 'usd'
   view: 'operador',     // color de los pozos: 'operador' o 'dueno'
-  color: 'cat',         // 'cat' (origen del capital) o 'grupo' (empresa)
+  color: 'cat',         // 'cat' (origen del capital), 'grupo' (empresa) o 'neutro' (todos grises)
   foto: '2025-12',      // fecha de los dueños
   tam: 'pet',           // tamaño de los pozos: 'pet', 'gas', 'usd' o 'arena'
   filtro: { emp: '', pais: '' }, // '' = sin filtro
-  capas: { areas: true, ductos: false, quema: false, flujos: false },
+  capas: { areas: true, ductos: false, quema: false },
   paso: 0,
   sel: null,            // pozo seleccionado (id)
   hover: null,
@@ -29,6 +30,7 @@ export function duenosDe(p) {
 }
 
 export function colorDe(gi) {
+  if (S.color === 'neutro') return NEUTRO;
   if (S.color === 'cat') return colorCat(G[gi].cat);
   return colorGrupo(gi);
 }

@@ -11,6 +11,12 @@ import QUEMA from './data/quema.json';
 
 export const META = META_JSON;
 
+// nombres más cortos para mostrar
+const corto = n => (typeof n === 'string' ? n.replace(' (Mercuria)', '') : n);
+META.grupos.forEach(g => { g.nombre = corto(g.nombre); });
+['operado', 'por_participacion'].forEach(k => META.propiedad[k].forEach(r => { r.grupo = corto(r.grupo); }));
+META.productividad.forEach(r => { r.grupo = corto(r.grupo); });
+
 // "LOMA CAMPANA" -> "Loma Campana", "LA RIBERA I Y II" -> "La Ribera I y II"
 export function tc(s) {
   return String(s)
