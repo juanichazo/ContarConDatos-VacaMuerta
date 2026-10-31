@@ -63,18 +63,15 @@ main { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 460px; min-
 .dato { font: 17px/1.5 var(--serif); margin: 8px 0; }
 .nota { font-size: 11.5px; color: var(--muted); margin-top: 16px; padding-top: 8px; border-top: 1px solid var(--line); }
 
-/* resaltado de cifras: fondo de color suave, como un resaltador */
+/* cifras dentro del texto: en la letra de los títulos y del color del tema */
 .m-az, .m-vi, .m-ro {
-  font-family: var(--sans);
-  font-size: .9em;
-  font-weight: 600;
+  font: 600 1.06em/1 'Oswald', 'Arial Narrow', sans-serif;
+  letter-spacing: .01em;
   white-space: nowrap;
-  padding: 0 .15em;
-  border-radius: 2px;
 }
-.m-az { background: rgba(61,108,196,.18); }
-.m-vi { background: rgba(132,98,201,.20); }
-.m-ro { background: rgba(208,52,44,.16); }
+.m-az { color: #2C56A8; }
+.m-vi { color: #B0620A; }
+.m-ro { color: #C2321F; }
 
 /* gráficos */
 .ch svg text { font-family: var(--sans); }
@@ -191,8 +188,6 @@ table.libro td, table.libro th { border-bottom-color: #D6C6AE; }
 
 /* ---------- paleta azul / ámbar (la quema sigue naranja) ---------- */
 :root { --violeta: #F0A53A; --rojo: #FF5638; }
-.m-vi { background: rgba(240,165,58,.30); }
-.m-ro { background: rgba(255,86,56,.20); }
 
 /* ---------- más distorsión en todas las pantallas ---------- */
 .pelicula { opacity: .2; }

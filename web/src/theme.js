@@ -9,10 +9,10 @@ export const NEUTRO = '#7C879C'; // pozos cuando el tema del paso es otro (por e
 export const CAT_COLORS = {
   'Argentina': AZUL,
   'Mixto': VIOLETA,
-  // capital con sede afuera: tonos de rojo
+  // capital con sede afuera: un color distinto por región
   'EE.UU.': CARMIN,
-  'Europa': '#D4566A',
-  'Asia y Medio Oriente': '#7E1A2E',
+  'Europa': '#1F9E89',
+  'Asia y Medio Oriente': '#7B52B9',
   'Latinoamérica': '#E89AA6',
   'Otros': '#8A8F94',
 };
@@ -24,11 +24,13 @@ export const GRUPO_COLORS = {
   'Capex': '#A9C6F2', 'GyP (Neuquén)': '#6C86B8', 'Otras argentinas': '#C2D4EE',
   // mixtas: ámbar
   'Vista': '#E8952A', 'PAE': '#F5C27A',
-  // extranjeras: rojos
+  // EE.UU.: rojos
   'Chevron': '#B3243A', 'ExxonMobil': '#D4566A', 'Continental Resources': '#E68A99', 'Dow': '#7E1A2E', 'ConocoPhillips': '#C9405A',
-  'Shell': '#C2364E', 'TotalEnergies': '#9E2034', 'Equinor': '#EDB0BA', 'Harbour Energy': '#8A1E33', 'Wintershall Dea': '#8A1E33',
-  'Phoenix': '#F2C7CE', 'Interoil': '#D9798A',
-  'Petronas': '#6E1628', 'QatarEnergy': '#B0485C',
+  // Europa: verdes azulados
+  'Shell': '#1F9E89', 'TotalEnergies': '#157A6A', 'Equinor': '#6CC4B3', 'Harbour Energy': '#0F5C50', 'Wintershall Dea': '#0F5C50',
+  'Phoenix': '#A8DDD2', 'Interoil': '#4DB3A0',
+  // Asia y Medio Oriente: violetas
+  'Petronas': '#5E3A99', 'QatarEnergy': '#9C7AD1',
   'GeoPark': '#E89AA6', 'Petrobras': '#DD8494',
 };
 
