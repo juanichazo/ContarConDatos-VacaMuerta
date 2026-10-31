@@ -593,6 +593,7 @@ function llenarFiltros() {
 selEmp.addEventListener('change', () => {
   S.filtro.emp = selEmp.value;
   render();
+  zoomAlFiltro();
 });
 selPais.addEventListener('change', () => {
   S.filtro.pais = selPais.value;
