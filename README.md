@@ -17,6 +17,7 @@ Descargados el 28/10/2026. Para validar, comparar con el hash en `data/raw/MANIF
 
 ## Correr
 
+ejecutar:   
 ```
 pip install duckdb pandas geopandas pyarrow openpyxl pdfplumber
 python scripts/run_all.py
