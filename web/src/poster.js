@@ -142,7 +142,7 @@ const estado = r => (b[r].neuquen + b[r].nacion) / b[r].fob * 100;
 
 document.getElementById('poster').innerHTML = `
 <header>
-  <h1>Vaca Muerta 2025</h1>
+  <h1>Vaca Muerta de Punta a Punta</h1>
   <p class="sub">Quién opera, quién es dueño, qué entra y qué sale · borrador sin diseño final</p>
   <p class="kpi"><b>${num(k.pozos_activos)}</b> pozos activos · <b>${num(L.petroleo.fisico / 1e6, 1)}</b> MMbbl de petróleo · <b>${num(L.gas.fisico / 1e9, 1)}</b> bcm de gas · <b>${fmt.mmusd(valTot)}</b> de valor estimado</p>
 </header>
